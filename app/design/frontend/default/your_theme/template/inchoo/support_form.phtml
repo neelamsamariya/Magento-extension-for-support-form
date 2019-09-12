@@ -1,0 +1,412 @@
+<?php
+require_once(Mage::getBaseDir().DS.'lib'.DS.'reCaptcha/recaptchalib.php');
+//require(Mage::getBaseDir().DS.'dir'.DS.'test.php');
+
+$publickey = "you get this key from google recaptcha"; // you got this from the signup page
+$privatekey = "you get this key from google recaptcha";
+?>
+
+<script type="text/javascript" src="<?php echo $this->getSkinUrl(); ?>js/jquery-1.11.0.min.js"></script>
+<script>jQuery.noConflict();</script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl(); ?>js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl(); ?>js/jquery.validate.js"></script>
+<meta name="viewport" content="width=device-width">
+<link href="<?php echo $this->getSkinUrl(); ?>css/jquery-ui.css" rel="stylesheet">
+
+<script type="text/javascript">
+function validateCaptcha()
+{
+    challengeField = jQuery("input#recaptcha_challenge_field").val();
+    responseField = jQuery("input#recaptcha_response_field").val();   
+    var html = jQuery.ajax({
+    type: "POST",
+    url: "<?php echo $this->getUrl('supportform/') ?>index/recaptcha",
+    data: "recaptcha_challenge_field=" + challengeField + "&recaptcha_response_field=" + responseField,
+    async: false
+    }).responseText;
+    
+    if(html == "success")
+    {
+        //jQuery("#captchaStatus").html("Success. Submitting form.");
+        //return false;
+        // Uncomment the following line in your application
+        return true;
+    }
+    else
+    {
+        jQuery("#captchaStatus").html("Your captcha is incorrect. Please try again");
+        Recaptcha.reload();
+        return false;
+    }
+}
+</script>
+<style>
+
+            .left_div_inputs {
+                margin: 2px 10px;
+                padding: 15px 10px;
+                width: 280px;
+                height:auto;
+                line-height:15px;
+            }
+            span{margin: 2px 10px;}
+            .box_select{
+                width: 350px;border:1px solid #ABADB3;
+                line-height:42px;
+            }
+            .box_select1{
+                width: 302px;border:1px solid #ABADB3;
+                line-height:42px;
+            }
+            .x-btn-icon-el{
+               background-color: #52a2c6;
+    border: medium none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 17px;
+    font-weight: bold;
+    margin-top: 3%;
+    width: 143px !important;
+            }
+			#SupportTextArea {
+    border: 1px solid #cfd1d3 !important;
+    max-height: 165px;
+    max-width: 528px;
+    min-height: 165px;
+    min-width: 528px;
+    resize: none;
+}
+
+#support_contact_form label.error {
+color:red;
+}
+#support_contact_form input.error {
+border:1px solid red;
+}
+.left_div{
+ background: #f1f2f2 none repeat scroll 0 0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    float: left;
+    padding: 2% 0;
+    width: 65%;
+}
+.right_div{width: 30%; padding: 2% 0 0 2%;}
+.myDiv{
+	width:50%;float:left;}
+	
+	
+.hdr-static {
+    color: #fff;
+    height: 80px;
+    width: 997px;
+    margin: 10px 0;
+}
+
+.hdr-static .hdr-text-bg {
+    background-color: #f1f2f2;
+    display: block;   
+    height: 80px;
+    width: 997px;
+}
+
+.hdr-static .hdr-text-bg .title {
+    color: #08719d;
+    font-size: 20px;
+    font-weight: bold;
+    left: 25px;
+    line-height: 20px;
+    max-width: 975px;
+    position: relative;
+    top: 20px;
+    margin:5px 0;
+}
+
+.hdr-static .hdr-text-bg .sub-title {
+    color: #444;
+    font-size: 12px;
+    font-style: italic;
+    left: 25px;
+    line-height: 12px;
+    max-width: 975px;
+    position: relative;
+    top: 20px;
+}
+.recaptcha_widget {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	max-width: 300px;
+	border: 4px solid #AF1500;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-ms-border-radius: 4px;
+	-o-border-radius: 4px;
+	border-radius: 4px;
+	background: #AF1500;
+	margin: 0 0 10px
+}
+#recaptcha_image {
+	width: 100% !important;
+	height: auto !important
+}
+#recaptcha_image img {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 100%;
+	height: auto;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	-ms-border-radius: 2px;
+	-o-border-radius: 2px;
+	border-radius: 2px;
+	border: 3px solid #FFF
+}
+.recaptcha_is_showing_audio embed {
+	height: 0;
+	width: 0;
+	overflow: hidden
+}
+.recaptcha_is_showing_audio #recaptcha_image {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 100%;
+	height: 60px;
+	background: #FFF;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	-ms-border-radius: 2px;
+	-o-border-radius: 2px;
+	border-radius: 2px;
+	border: 3px solid #FFF
+}
+.recaptcha_is_showing_audio #recaptcha_image br {
+	display: none
+}
+.recaptcha_is_showing_audio #recaptcha_image #recaptcha_audio_download {
+	display: block
+}
+.recaptcha_input {
+	background: #FFDC73;
+	color: #000;
+	font: 13px/1.5 "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, "Liberation Sans", FreeSans, sans-serif;
+	margin: 4px 0 0;
+	padding: 0 4px 4px;
+	border: 4px solid #FFDC73;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	-ms-border-radius: 2px;
+	-o-border-radius: 2px;
+	border-radius: 2px
+}
+.recaptcha_input label {
+	margin: 0 0 6px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box
+}
+.recaptcha_input input {
+	width: 100%
+}
+.recaptcha_options {
+	list-style: none;
+	margin: 4px 0 0;
+	height: 18px
+}
+.recaptcha_options li {
+	float: left;
+	margin: 0 4px 0 0
+}
+.recaptcha_options li a {
+	text-decoration: none;
+	text-shadow: 0 1px 1px #000;
+	font-size: 16px;
+	color: #FFF;
+	display: block;
+	width: 20px;
+	height: 18px
+}
+.recaptcha_options li a:active {
+	position: relative;
+	top: 1px;
+	text-shadow: none
+}
+.captcha_hide {
+	display: none
+}
+
+@media screen 
+and (min-device-width: 768px) and (max-device-width: 1023px)   {
+		.box_select{
+		width:88%;border:1px solid #ABADB3;}
+	.box_select1{
+		width:88%; border:1px solid #ABADB3;}
+	 }	
+@media screen 
+and (max-device-width: 1024px)    { 
+  .left_div{width: 100% !important;}
+  .right_div{width: 100% !important; padding:2% 0;}
+ 
+	.hdr-static {width:100%;} 
+	.hdr-static .hdr-text-bg{width:100%;}
+	.hdr-static .hdr-text-bg .sub-title {max-width:100%;}
+	.myDiv{width:100%;float:left;}
+	.box_select{
+		width:85%;border:1px solid #ABADB3;}
+	.box_select1{
+		width:85%; border:1px solid #ABADB3;}
+	.left_div_inputs{
+		width:85%;}
+	.recaptchatable #recaptcha_response_field{padding:4% !important; font-size:12px;}			
+				
+#SupportTextArea {
+ border: 1px solid #cfd1d3 !important;
+    max-height: 165px;
+    max-width: 90%;
+    min-height: 165px;
+    min-width: 85%;
+    resize: none;
+}
+#recaptcha_image img{  margin-left: -19px !important;
+    width: 90%;}
+#recaptcha_area, #recaptcha_table{
+width:300px !important;}
+
+  .recaptchatable .recaptcha_r1_c1, 
+    .recaptchatable .recaptcha_r3_c1, 
+    .recaptchatable .recaptcha_r2_c2,
+    .recaptchatable .recaptcha_r3_c2, 
+    .recaptchatable .recaptcha_r7_c1, 
+    .recaptchatable .recaptcha_r8_c1, 
+    .recaptchatable .recaptcha_r3_c3, 
+    .recaptchatable .recaptcha_r2_c1, 
+    .recaptchatable .recaptcha_r4_c1, 
+    .recaptchatable .recaptcha_r4_c2, 
+    .recaptchatable .recaptcha_r4_c4, 
+    .recaptchatable .recaptcha_image_cell {   
+    background: none !important;   
+    }
+    #recaptcha_response_field{padding:3%; font-size:11px;}
+
+	}
+	
+	
+	
+        </style>
+          <script>
+  jQuery(function() {
+	
+    jQuery( "#datepicker" ).datepicker({ 
+    dateFormat: 'dd-mm-yy',
+     changeMonth: true,
+    changeYear: true });
+	
+	jQuery.validator.addClassRules('customphone', {
+		customphone: true
+	});
+	jQuery.validator.addMethod('customphone', function (value, element) {
+		return this.optional(element) || /^\d{3}-\d{3}-\d{4}$/.test(value);
+	}, "Please enter a valid phone number");
+	
+	jQuery("#support_contact_form").validate({
+			rules: {
+				firstname: "required",	
+				lastname: "required",
+				email: "required",
+				confirmed_email: {
+					equalTo: '#email',
+				},
+				birthdate: "required",
+				state: "required",
+				phone_number: "required",	
+						
+				
+			},			
+			errorPlacement: function(){
+            return false;  // suppresses error message text
+        }
+		});
+	
+	
+	
+	
+  });
+  </script>
+
+<div class="box simple_contact" id="custom_supportform">
+ 
+<form id="support_contact_form" name="support_contact_form" action="<?php echo $this->getUrl('supportform/') ?>index/sendemail" method="post" onSubmit="return validateCaptcha()">
+ 
+ <div class="hdr-static">
+	<div class="hdr-text-bg hdr-privacy-center">
+		<div class="title">Support Center Form</div>
+		<div class="sub-title">Email - Phone - Live Chat - Fax - Mail</div>
+	</div>
+</div>
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+    <div class="left_div">
+            <span>Emails are responded to in the order they are received. Please expect up to one business day to receive a reply.</span>
+
+
+			<div style="width:100%;">
+            <div class="myDiv">
+             <input name="firstname" id="firstname" title="First Name" value="" type="text" placeholder="FIRST NAME" class="left_div_inputs"/>
+            </div>
+            <div class="myDiv">
+             <input name="lastname" id="lastname" title="Last Name" value="" type="text" placeholder="LAST NAME" class="left_div_inputs"/>
+            </div>
+            <div style="width:100%; float:left;">
+            	<select name="type_of_permit" id="type_of_permit" class="box_select left_div_inputs">
+                    <option value="">TYPE OF PERMIT OR CERTIFICATE</option>
+                    <option value="Food Handler">Food Handler</option>
+                    <option value="Alcohol Training">Alcohol Training</option>
+                    <option value="Management Training">Management Training</option>
+                    <option value="Child Chare Food Handler">Child Chare Food Handler</option>
+                    </select>
+            </div>
+            <p> <span> This helps us distinguish you from others.(MM/DD/YYYY)</span></p>
+             <div class="myDiv">
+             <input name="birthdate" id="datepicker" title="Birth Date" value="" class="required left_div_inputs" type="text" placeholder="BIRTHDATE"/>
+            </div>
+            <div class="myDiv">
+            <input name="state" id="state" title="State" value="" class="required left_div_inputs" type="text" placeholder="STATE/LOCATION"/>
+            </div>
+                <div class="myDiv">
+             <input type="text" name="email" id="email" value="" class="required email left_div_inputs" placeholder="EMAIL"/>     
+            </div>
+            <div class="myDiv">
+             <input type="text" name="confirmed_email" id="confirmed_email" value="" class="required email left_div_inputs" placeholder="CONFIRM EMAIL"/>
+            </div>
+            <p> <span>Please include your area code (XXX) XXX-XXXX</span></p>
+                 <div class="myDiv">
+              <input type="text" name="phone_number" id="phone_number" value="" class="required customphone left_div_inputs" placeholder="PHONENUMBER"/>    
+            </div>
+            <div class="myDiv">
+             <select class="box_select1 left_div_inputs" name="preferrred_contact">                        	
+                            <option value="Email">Email</option>
+                            <option value="Call me in the Morning (7AM - 11AM)">Call me in the Morning (7AM - 11AM)</option>
+                            <option value="Call me in the Afternoon (11AM - 4PM)">Call me in the Afternoon (11AM - 4PM)</option>   
+                            <option value="Call me in the Evening (4PM - 7PM)">Call me in the Evening (4PM - 7PM)</option>  
+                            <option value="Call me anytime (7AM - 7PM)">Call me anytime (7AM - 7PM)</option>                            
+                        </select>       
+            </div>
+            <p> <span style="float:left;"> <br/>&nbsp;&nbsp;   (Please explain your problem or situation in detail so we know how to help you.)</span></p>
+            <div>
+             <textarea class="SupportFormBoxForm left_div_inputs" name="SupportTextArea" id="SupportTextArea"></textarea>
+            </div>
+            <div class="myDiv">
+             <p><?php echo recaptcha_get_html($publickey);?></p>
+    	      <p style="color: red;" id="captchaStatus">&nbsp;</p>
+            </div>
+            <div class="myDiv">
+            <input type="submit" name="" class="x-btn-icon-el left_div_inputs" value="SUBMIT"/> 
+            </div>
+            </div>
+
+            
+        </div>
+</form>
+ 
+</div>
